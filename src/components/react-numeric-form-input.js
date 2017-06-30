@@ -14,6 +14,7 @@ export default class extends PureComponent{
   static propTypes = {
     className:PropTypes.string,
     value:PropTypes.string,
+    placeholder:PropTypes.string,
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
@@ -39,6 +40,7 @@ export default class extends PureComponent{
     this._instance.component.show({
       type: this.props.type,
       filter: this.props.filter,
+      placeholder: this.props.placeholder,
       maxLength: this.props.maxLength,
       value: this.state.value,
       onChange: this._onChange
@@ -55,12 +57,13 @@ export default class extends PureComponent{
   };
 
   render(){
-    const { className,value,maxLength,filter,...props } = this.props;
+    const { className,value,maxLength,filter,placeholder,...props } = this.props;
 
     return (
       <div {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
         filter={filter}
+        placeholder={placeholder}
         maxLength={maxLength}
         onFocus={this._onFocus}
         onClear={this._onClear}
