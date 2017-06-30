@@ -49,19 +49,19 @@ export default class extends PureComponent{
   };
 
   _onClear = inEvent => {
-    this.setState({value:''});
+    this.setState({ value:'' });
   };
 
   _onChange = inEvent => {
     const {value} = inEvent.target;
-    this.setState({value});
+    this.setState({ value });
   };
 
   render(){
     const { className,value,maxLength,filter,placeholder,...props } = this.props;
 
     return (
-      <div {...props} className={ classNames('react-numeric-form-input',className) }>
+      <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
         filter={filter}
         placeholder={placeholder}
@@ -69,7 +69,7 @@ export default class extends PureComponent{
         onFocus={this._onFocus}
         onClear={this._onClear}
         value={this.state.value} />
-      </div>
+      </section>
     );
   }
 }
