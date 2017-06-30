@@ -21,7 +21,8 @@ export default class extends PureComponent{
   };
 
   static defaultProps = {
-    type:'blank'
+    type:'blank',
+    value:''
   };
   /*===properties end===*/
 

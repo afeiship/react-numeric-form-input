@@ -8,13 +8,15 @@
   static propTypes = {
     className:PropTypes.string,
     value:PropTypes.string,
+    placeholder:PropTypes.string,
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
   };
 
   static defaultProps = {
-    type:'blank'
+    type:'blank',
+    value:''
   };
   
 ```
@@ -49,16 +51,16 @@ class App extends React.Component{
     return (
       <div className="hello-react-numeric-form-input">
         <h3>Type: blank [ filter: password]</h3>
-        <ReactNumericFormInput className="test-np" type="blank" filter={this._toPwd.bind(this)} value="1234" maxLength={10} ref='rc1' />
+        <ReactNumericFormInput className="test-np" type="blank" filter={this._toPwd.bind(this)} placeholder="Please input password" maxLength={10} ref='rc1' />
 
         <h3>Type: identity [ filter: none]</h3>
-        <ReactNumericFormInput className="test-np" type="identity" value="421124196701182450" maxLength={18} ref='rc2' />
+        <ReactNumericFormInput className="test-np" type="identity" value="421124196701182450" placeholder="Please input identity"  maxLength={18} ref='rc2' />
 
         <h3>Type: currency [ filter: none]</h3>
-        <ReactNumericFormInput className="test-np" type="currency" value="11.02" ref='rc3' />
+        <ReactNumericFormInput className="test-np" type="currency" value="11.02" placeholder="Please input currency"  ref='rc3' />
 
         <h3>Type: number [ filter: toThousands]</h3>
-        <ReactNumericFormInput className="test-np" type="number" filter={this._toTh.bind(this)} value="1102" ref='rc3' />
+        <ReactNumericFormInput className="test-np" type="number" filter={this._toTh.bind(this)} placeholder="Please input number"  value="1102" ref='rc3' />
     </div>
     );
   }
