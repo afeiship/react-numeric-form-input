@@ -41,6 +41,10 @@ class App extends React.Component{
     return inValue.replace(/\w/g,'*');
   }
 
+  _toTh(inValue){
+    return toThousands(inValue);
+  }
+
   render(){
     return (
       <div className="hello-react-numeric-form-input">
@@ -49,6 +53,12 @@ class App extends React.Component{
 
         <h3>Type: identity [ filter: none]</h3>
         <ReactNumericFormInput className="test-np" type="identity" value="421124196701182450" maxLength={18} ref='rc2' />
+
+        <h3>Type: currency [ filter: none]</h3>
+        <ReactNumericFormInput className="test-np" type="currency" value="11.02" ref='rc3' />
+
+        <h3>Type: number [ filter: toThousands]</h3>
+        <ReactNumericFormInput className="test-np" type="number" filter={this._toTh.bind(this)} value="1102" ref='rc3' />
     </div>
     );
   }
