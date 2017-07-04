@@ -14,6 +14,7 @@ export default class extends PureComponent{
   static propTypes = {
     className:PropTypes.string,
     value:PropTypes.string,
+    onChange: PropTypes.func,
     placeholder:PropTypes.string,
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
@@ -22,7 +23,8 @@ export default class extends PureComponent{
 
   static defaultProps = {
     type:'blank',
-    value:''
+    value:'',
+    onChange: noop
   };
   /*===properties end===*/
 
@@ -37,6 +39,11 @@ export default class extends PureComponent{
     this._instance = ReactVirtualKeyboardCtrl.newInstance(this.props);
   }
 
+  doChange = () =>{
+    const { value } = this.state;
+    this.props.onChange( { target: { value } } );
+  };
+
   _onFocus = inEvent => {
     this._instance.component.show({
       type: this.props.type,
@@ -49,12 +56,12 @@ export default class extends PureComponent{
   };
 
   _onClear = inEvent => {
-    this.setState({ value:'' });
+    this.setState({ value:'' },this.doChange);
   };
 
   _onChange = inEvent => {
     const {value} = inEvent.target;
-    this.setState({ value });
+    this.setState({ value },this.doChange);
   };
 
   render(){

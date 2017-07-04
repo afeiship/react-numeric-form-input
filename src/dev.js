@@ -26,11 +26,15 @@ class App extends React.Component{
     return toThousands(inValue);
   }
 
+  _change = e =>{
+    console.log( 'input on change....',e.target.value )
+  }
+
   render(){
     return (
       <div className="hello-react-numeric-form-input">
         <h3>Type: blank [ filter: password]</h3>
-        <ReactNumericFormInput className="test-np" type="blank" filter={this._toPwd.bind(this)} placeholder="Please input password" maxLength={10} ref='rc1' />
+        <ReactNumericFormInput onChange={this._change} className="test-np" type="blank" filter={this._toPwd.bind(this)} placeholder="Please input password" maxLength={10} ref='rc1' />
 
         <h3>Type: identity [ filter: none]</h3>
         <ReactNumericFormInput className="test-np" type="identity" value="421124196701182450" placeholder="Please input identity"  maxLength={18} ref='rc2' />
