@@ -42,15 +42,18 @@ export default class extends PureComponent{
   componentWillReceiveProps(nextProps){
     const {value} = nextProps;
     if(value !== this.state.value){
-      this.setState({ value });
+      this.doChange(value);
     }
   }
 
   doChange = (inValue) =>{
     const { value } = this.state;
     if(inValue !== value){
-      this.setState({ value: inValue },()=>{
-        this.props.onChange( { target: { value: inValue } } );
+      const targetValue = { value: inValue };
+      this.setState(targetValue,()=>{
+        this._instance.component.update(targetValue).then(()=>{
+          this.props.onChange( { target: targetValue } );
+        });
       })
     }
   };
@@ -81,12 +84,12 @@ export default class extends PureComponent{
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
-        filter={filter}
-        placeholder={placeholder}
+        filter={ filter }
+        placeholder={ placeholder }
         maxLength={maxLength}
-        onFocus={this._onFocus}
-        onClear={this._onClear}
-        value={this.state.value} />
+        onFocus={ this._onFocus }
+        onClear={ this._onClear }
+        value={ this.state.value } />
       </section>
     );
   }
