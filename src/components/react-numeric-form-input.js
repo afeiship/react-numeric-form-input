@@ -39,6 +39,13 @@ export default class extends PureComponent{
     this._instance = ReactVirtualKeyboardCtrl.newInstance(this.props);
   }
 
+  componentWillReceiveProps(nextProps){
+    const {value} = nextProps;
+    if(value !== this.state.vaule){
+      this.setState({ value });
+    }
+  }
+
   doChange = () =>{
     const { value } = this.state;
     this.props.onChange( { target: { value } } );
