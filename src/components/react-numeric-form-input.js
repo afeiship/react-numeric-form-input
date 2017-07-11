@@ -41,15 +41,18 @@ export default class extends PureComponent{
 
   componentWillReceiveProps(nextProps){
     const {value} = nextProps;
-    console.log(value)
     if(value !== this.state.value){
       this.setState({ value });
     }
   }
 
-  doChange = () =>{
+  doChange = (inValue) =>{
     const { value } = this.state;
-    this.props.onChange( { target: { value } } );
+    if(inValue !== value){
+      this.setState({ value: inValue },()=>{
+        this.props.onChange( { target: { value: inValue } } );
+      })
+    }
   };
 
   _onFocus = inEvent => {
@@ -64,12 +67,12 @@ export default class extends PureComponent{
   };
 
   _onClear = inEvent => {
-    this.setState({ value:'' },this.doChange);
+    this.doChange('');
   };
 
   _onChange = inEvent => {
     const {value} = inEvent.target;
-    this.setState({ value },this.doChange);
+    this.doChange(value);
   };
 
   render(){
