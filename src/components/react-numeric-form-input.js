@@ -19,12 +19,16 @@ export default class extends PureComponent{
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
+    clearable: PropTypes.bool,
+    blinkable: PropTypes.bool,
   };
 
   static defaultProps = {
-    type:'blank',
+    type: 'blank',
     value:'',
-    onChange: noop
+    onChange: noop,
+    clearable: false,
+    blinkable: false
   };
   /*===properties end===*/
 
@@ -36,7 +40,8 @@ export default class extends PureComponent{
   }
 
   componentWillMount() {
-    this._instance = ReactVirtualKeyboardCtrl.newInstance(this.props);
+    const { clearable, blinkable, ...props} = this.props;
+    this._instance = ReactVirtualKeyboardCtrl.newInstance(props);
   }
 
   componentWillReceiveProps(nextProps){
@@ -79,7 +84,7 @@ export default class extends PureComponent{
   };
 
   render(){
-    const { className,value,maxLength,filter,placeholder,...props } = this.props;
+    const { className,value,maxLength,filter,placeholder, clearable,blinkable,...props } = this.props;
 
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
@@ -87,6 +92,8 @@ export default class extends PureComponent{
         filter={ filter }
         placeholder={ placeholder }
         maxLength={maxLength}
+        clearable={clearable}
+        blinkable={blinkable}
         onFocus={ this._onFocus }
         onClear={ this._onClear }
         value={ this.state.value } />
