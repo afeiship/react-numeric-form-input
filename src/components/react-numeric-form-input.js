@@ -41,7 +41,8 @@ export default class extends PureComponent{
 
   componentWillReceiveProps(nextProps){
     const {value} = nextProps;
-    if(value !== this.state.vaule){
+    console.log(value)
+    if(value !== this.state.value){
       this.setState({ value });
     }
   }
