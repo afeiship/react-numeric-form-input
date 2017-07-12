@@ -51,7 +51,7 @@ export default class extends PureComponent{
     }
   }
   componentWillUnmount() {
-    this._instance.destory();
+    this._instance.destroy();
     this._instance = null;
   }
 
@@ -69,6 +69,7 @@ export default class extends PureComponent{
   };
 
   _onFocus = inEvent => {
+    window.ss = this;
     this._instance.component.show({
       type: this.props.type,
       filter: this.props.filter,
