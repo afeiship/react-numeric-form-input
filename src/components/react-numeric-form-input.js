@@ -50,6 +50,11 @@ export default class extends PureComponent{
       this.doChange(value);
     }
   }
+  componentWillUnmount() {
+    this._instance.destory();
+    this._instance = null;
+  }
+
 
   doChange = (inValue) =>{
     const { value } = this.state;
