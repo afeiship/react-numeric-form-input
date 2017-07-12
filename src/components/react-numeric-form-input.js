@@ -50,11 +50,11 @@ export default class extends PureComponent{
       this.doChange(value);
     }
   }
+
   componentWillUnmount() {
     this._instance.destroy();
     this._instance = null;
   }
-
 
   doChange = (inValue) =>{
     const { value } = this.state;
@@ -69,7 +69,6 @@ export default class extends PureComponent{
   };
 
   _onFocus = inEvent => {
-    window.ss = this;
     this._instance.component.show({
       type: this.props.type,
       filter: this.props.filter,
