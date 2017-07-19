@@ -93,10 +93,11 @@ export default class extends PureComponent{
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
         filter={ this.state.filter }
-        placeholder={ placeholder }
-        maxLength={maxLength}
-        clearable={clearable}
-        blinkable={blinkable}
+        placeholder={ this.state.placeholder }
+        maxLength={this.state.maxLength}
+        clearable={this.state.clearable}
+        blinkable={this.state.blinkable}
+        focused={this.state.focused}
         onFocus={ this._onFocus }
         onClear={ this._onClear }
         value={ this.state.value } />
