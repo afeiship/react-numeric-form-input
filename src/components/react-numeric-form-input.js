@@ -1,6 +1,6 @@
 // import './style.scss';
 
-import React,{PureComponent} from 'react';
+import React,{PureComponent,Component} from 'react';
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -25,8 +25,9 @@ export default class extends PureComponent{
   static defaultProps = {
     type: 'blank',
     value:'',
+    focused: false,
     onChange: noop,
-    blinkable: false
+    blinkable: true
   };
   /*===properties end===*/
 
@@ -38,7 +39,7 @@ export default class extends PureComponent{
   }
 
   componentWillMount() {
-    const { blinkable, ...props} = this.props;
+    const { focused, blinkable, ...props } = this.props;
     this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
   }
 
@@ -53,13 +54,13 @@ export default class extends PureComponent{
 
   doChange = (inValue) =>{
     const { value } = this.state;
+
     if(inValue !== value){
       const targetValue = { value: inValue };
       const { value, ...newProps } = this.state;
       this.setState(targetValue,()=>{
         this._instance.component.update( objectAssign( targetValue, newProps) ).then(()=>{
-          this.state.onChange( { target: targetValue } );
-          console.log('do change.');
+          this.state.onChange({ target: targetValue });
         });
       })
     }
@@ -82,19 +83,19 @@ export default class extends PureComponent{
   };
 
   render(){
-    const { className,value,maxLength,filter,placeholder, blinkable,...props } = this.props;
+    const { className,value,maxLength,filter,focused, placeholder, blinkable,...props } = this.props;
 
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
-        filter={ this.state.filter }
-        placeholder={ this.state.placeholder }
-        maxLength={this.state.maxLength}
-        clearable={false}
-        blinkable={this.state.blinkable}
-        focused={this.state.focused}
-        onFocus={ this._onFocus }
-        value={ this.state.value } />
+          filter={ this.state.filter }
+          placeholder={ this.state.placeholder }
+          maxLength={this.state.maxLength}
+          clearable={false}
+          blinkable={this.state.blinkable}
+          focused={this.state.focused}
+          onFocus={ this._onFocus }
+          value={ this.state.value } />
       </section>
     );
   }
