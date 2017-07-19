@@ -19,7 +19,6 @@ export default class extends PureComponent{
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
-    clearable: PropTypes.bool,
     blinkable: PropTypes.bool,
   };
 
@@ -27,7 +26,6 @@ export default class extends PureComponent{
     type: 'blank',
     value:'',
     onChange: noop,
-    clearable: false,
     blinkable: false
   };
   /*===properties end===*/
@@ -40,7 +38,7 @@ export default class extends PureComponent{
   }
 
   componentWillMount() {
-    const { clearable, blinkable, ...props} = this.props;
+    const { blinkable, ...props} = this.props;
     this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
   }
 
@@ -61,6 +59,7 @@ export default class extends PureComponent{
       this.setState(targetValue,()=>{
         this._instance.component.update( objectAssign( targetValue, newProps) ).then(()=>{
           this.state.onChange( { target: targetValue } );
+          console.log('do change.');
         });
       })
     }
@@ -77,17 +76,13 @@ export default class extends PureComponent{
     });
   };
 
-  _onClear = inEvent => {
-    this.doChange('');
-  };
-
   _onChange = inEvent => {
     const {value} = inEvent.target;
     this.doChange(value);
   };
 
   render(){
-    const { className,value,maxLength,filter,placeholder, clearable,blinkable,...props } = this.props;
+    const { className,value,maxLength,filter,placeholder, blinkable,...props } = this.props;
 
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
@@ -95,11 +90,10 @@ export default class extends PureComponent{
         filter={ this.state.filter }
         placeholder={ this.state.placeholder }
         maxLength={this.state.maxLength}
-        clearable={this.state.clearable}
+        clearable={false}
         blinkable={this.state.blinkable}
         focused={this.state.focused}
         onFocus={ this._onFocus }
-        onClear={ this._onClear }
         value={ this.state.value } />
       </section>
     );
