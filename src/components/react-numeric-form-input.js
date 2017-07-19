@@ -35,20 +35,17 @@ export default class extends PureComponent{
   constructor(props) {
     super(props);
     this.state = {
-      value: props.value
+      ...props
     };
   }
 
   componentWillMount() {
     const { clearable, blinkable, ...props} = this.props;
-    this._instance = ReactVirtualKeyboardCtrl.newInstance(props);
+    this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
   }
 
   componentWillReceiveProps(nextProps){
-    const {value} = nextProps;
-    if(value !== this.state.value){
-      this.doChange(value);
-    }
+    this.setState( nextProps );
   }
 
   componentWillUnmount() {
@@ -60,9 +57,10 @@ export default class extends PureComponent{
     const { value } = this.state;
     if(inValue !== value){
       const targetValue = { value: inValue };
+      const { value, ...newProps } = this.state;
       this.setState(targetValue,()=>{
-        this._instance.component.update(targetValue).then(()=>{
-          this.props.onChange( { target: targetValue } );
+        this._instance.component.update( objectAssign( targetValue, newProps) ).then(()=>{
+          this.state.onChange( { target: targetValue } );
         });
       })
     }
@@ -70,10 +68,10 @@ export default class extends PureComponent{
 
   _onFocus = inEvent => {
     this._instance.component.show({
-      type: this.props.type,
-      filter: this.props.filter,
-      placeholder: this.props.placeholder,
-      maxLength: this.props.maxLength,
+      type: this.state.type,
+      filter: this.state.filter,
+      placeholder: this.state.placeholder,
+      maxLength: this.state.maxLength,
       value: this.state.value,
       onChange: this._onChange
     });
@@ -94,7 +92,7 @@ export default class extends PureComponent{
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
-        filter={ filter }
+        filter={ this.state.filter }
         placeholder={ placeholder }
         maxLength={maxLength}
         clearable={clearable}
