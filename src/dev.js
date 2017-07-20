@@ -31,6 +31,7 @@ class App extends React.Component{
   }
 
   _change = (inField,e) =>{
+    console.log('change:',inField,e);
     this.setState({
       [inField]: e.target.value
     })
@@ -38,12 +39,13 @@ class App extends React.Component{
 
   _click = (e,e2) => {
     console.log('click.');
-    // this.setState({
-    //   field: e
-    // });
+    this.setState({
+      field: e
+    });
   };
 
   render(){
+    console.log(this.state.field);
     return (
       <div className="hello-react-numeric-form-input">
         <h3>Type: blank [ filter: password]</h3>

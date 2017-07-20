@@ -19,7 +19,6 @@ export default class extends PureComponent{
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
-    blinkable: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -27,7 +26,6 @@ export default class extends PureComponent{
     value:'',
     focused: false,
     onChange: noop,
-    blinkable: true
   };
   /*===properties end===*/
 
@@ -38,64 +36,35 @@ export default class extends PureComponent{
     };
   }
 
-  componentWillMount() {
-    const { focused, blinkable, ...props } = this.props;
-    this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
-  }
-
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     this.setState( nextProps );
   }
 
-  componentWillUnmount() {
-    this._instance.destroy();
-    this._instance = null;
+  componentWillMount() {
+    const { focused, ...props } = this.props;
+    this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
   }
 
-  doChange = (inValue) =>{
-    const { value } = this.state;
-
-    if(inValue !== value){
-      const targetValue = { value: inValue };
-      const { value, ...newProps } = this.state;
-      this.setState(targetValue,()=>{
-        this._instance.component.update( objectAssign( targetValue, newProps) ).then(()=>{
-          this.state.onChange({ target: targetValue });
-        });
-      })
-    }
-  };
-
-  _onFocus = inEvent => {
-    this._instance.component.show({
-      type: this.state.type,
-      filter: this.state.filter,
-      placeholder: this.state.placeholder,
-      maxLength: this.state.maxLength,
-      value: this.state.value,
-      onChange: this._onChange
-    });
-  };
-
-  _onChange = inEvent => {
-    const {value} = inEvent.target;
-    this.doChange(value);
+  _onFocus = e => {
+    this.setState({ focused: true },()=>{
+      this._instance.component.show( this.state );
+    })
   };
 
   render(){
-    const { className,value,maxLength,filter,focused, placeholder, blinkable,...props } = this.props;
+    const { className,value,maxLength,filter,focused, placeholder,...props } = this.props;
 
     return (
       <section {...props} className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
-          filter={ this.state.filter }
-          placeholder={ this.state.placeholder }
-          maxLength={this.state.maxLength}
-          clearable={false}
-          blinkable={this.state.blinkable}
+          filter={ filter }
+          placeholder={ placeholder }
+          maxLength={maxLength}
+          clearable={ false }
+          blinkable={ true }
           focused={this.state.focused}
           onFocus={ this._onFocus }
-          value={ this.state.value } />
+          value={ value } />
       </section>
     );
   }
