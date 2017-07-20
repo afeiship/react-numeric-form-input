@@ -20,6 +20,7 @@ export default class extends PureComponent{
     type: PropTypes.oneOf(TYPES),
     maxLength:PropTypes.number,
     filter:PropTypes.func,
+    focused: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -29,6 +30,10 @@ export default class extends PureComponent{
     onChange: noop,
   };
   /*===properties end===*/
+
+  get hasFocused(){
+    return !!document.querySelector('.react-virtual-input[data-focuced=true]')
+  }
 
   constructor(props) {
     super(props);
@@ -64,7 +69,6 @@ export default class extends PureComponent{
   _onFocus = e => {
     this.setState({ focused: true },()=>{
       const newProps = objectAssign( {}, this.state, { onHidden: this._onHidden });
-      console.log(newProps);
       this._instance.component.show( newProps );
     });
   };
@@ -74,7 +78,12 @@ export default class extends PureComponent{
     const keyboardCtrl = document.querySelector('.react-virtual-keyboard-ctrl');
     const hasActiveElement = root.contains( e.target) || keyboardCtrl.contains(e.target);
     if( !hasActiveElement ){
-      this._instance.component.hide();
+      this.setState({ focused: false },()=>{
+        const timer = setTimeout(()=>{
+          !this.hasFocused && this._instance.component.hide();
+          clearTimeout( timer );
+        },0);
+      });
     }
   };
 
