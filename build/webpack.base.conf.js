@@ -14,6 +14,7 @@ var externals = process.env.NODE_ENV === 'production' ? {
   classnames: 'classnames',
   'react-dom': 'react-dom',
   'noop':'noop',
+  'next-dom-event':'next-dom-event',
   'react-virtual-input':'react-virtual-input',
   'react-virtual-keyboard-ctrl':'react-virtual-keyboard-ctrl',
   'object-assign':'object-assign',

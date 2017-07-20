@@ -8,6 +8,7 @@ import noop from 'noop';
 import objectAssign from 'object-assign';
 import {ReactVirtualKeyboardCtrl,TYPES} from 'react-virtual-keyboard-ctrl';
 import ReactVirtualInput from 'react-virtual-input';
+import NxDomEvent from 'next-dom-event';
 
 export default class extends PureComponent{
   /*===properties start===*/
@@ -43,19 +44,49 @@ export default class extends PureComponent{
   componentWillMount() {
     const { focused, ...props } = this.props;
     this._instance = ReactVirtualKeyboardCtrl.createInstance(props);
+    this.attachEvents();
+  }
+
+  componentWillUnmount() {
+    this.detachEvents();
+    this._instance.destroy();
+    this._instance = null;
+  }
+
+  attachEvents(){
+    this._docClickRes = NxDomEvent.on( document.body, 'click', this._onDocClick, false);
+  }
+
+  detachEvents(){
+    this._docClickRes.destroy();
   }
 
   _onFocus = e => {
     this.setState({ focused: true },()=>{
-      this._instance.component.show( this.state );
-    })
+      const newProps = objectAssign( {}, this.state, { onHidden: this._onHidden });
+      console.log(newProps);
+      this._instance.component.show( newProps );
+    });
+  };
+
+  _onDocClick = e => {
+    const { root } = this.refs;
+    const keyboardCtrl = document.querySelector('.react-virtual-keyboard-ctrl');
+    const hasActiveElement = root.contains( e.target) || keyboardCtrl.contains(e.target);
+    if( !hasActiveElement ){
+      this._instance.component.hide();
+    }
+  };
+
+  _onHidden = e =>{
+    this.setState({ focused: false });
   };
 
   render(){
-    const { className,value,maxLength,filter,focused, placeholder,...props } = this.props;
+    const { className,value,maxLength,filter,focused, placeholder, ...props } = this.props;
 
     return (
-      <section {...props} className={ classNames('react-numeric-form-input',className) }>
+      <section {...props} ref='root' className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
           filter={ filter }
           placeholder={ placeholder }
