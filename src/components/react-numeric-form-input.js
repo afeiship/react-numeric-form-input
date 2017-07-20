@@ -61,8 +61,8 @@ export default class extends PureComponent{
 
   componentWillUnmount() {
     this.detachEvents();
-    // this._instance.destroy();
-    // this._instance = null;
+    this._instance.destroy();
+    this._instance = null;
   }
 
   attachEvents(){
