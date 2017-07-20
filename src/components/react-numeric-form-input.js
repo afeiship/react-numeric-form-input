@@ -35,10 +35,17 @@ export default class extends PureComponent{
     return !!document.querySelector('.react-virtual-input[data-focuced=true]')
   }
 
+  get hasVirtualKeyboard(){
+    const el = document.querySelector('.react-virtual-keyboard-ctrl');
+    return !!el && !!el.offsetWidth;
+  }
+
   constructor(props) {
     super(props);
+    this._keyboard = false;
     this.state = {
-      ...props
+      ...props,
+      keyboard: false
     };
   }
 
@@ -67,7 +74,7 @@ export default class extends PureComponent{
   }
 
   _onFocus = e => {
-    this.setState({ focused: true },()=>{
+    this.setState({ focused: true, keyboard: true },()=>{
       const newProps = objectAssign( {}, this.state, { onHidden: this._onHidden });
       this._instance.component.show( newProps );
     });
@@ -78,7 +85,7 @@ export default class extends PureComponent{
     const keyboardCtrl = document.querySelector('.react-virtual-keyboard-ctrl');
     const hasActiveElement = root.contains( e.target) || keyboardCtrl.contains(e.target);
     if( !hasActiveElement ){
-      this.setState({ focused: false },()=>{
+      this.setState({ focused: false , keyboard: false},()=>{
         const timer = setTimeout(()=>{
           !this.hasFocused && this._instance.component.hide();
           clearTimeout( timer );
@@ -88,21 +95,20 @@ export default class extends PureComponent{
   };
 
   _onHidden = e =>{
-    this.setState({ focused: false });
+    this.setState({ focused: false, keyboard: false });
   };
 
   render(){
     const { className,value,maxLength,filter,focused, placeholder, ...props } = this.props;
-
     return (
-      <section {...props} ref='root' className={ classNames('react-numeric-form-input',className) }>
+      <section data-keyboard={this.state.keyboard} {...props} ref='root' className={ classNames('react-numeric-form-input',className) }>
         <ReactVirtualInput
           filter={ filter }
           placeholder={ placeholder }
           maxLength={maxLength}
           clearable={ false }
           blinkable={ true }
-          focused={this.state.focused}
+          focused={ this.state.keyboard && this.state.focused}
           onFocus={ this._onFocus }
           value={ value } />
       </section>

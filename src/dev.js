@@ -8,6 +8,7 @@ import toThousands from 'to-thousands';
 
 class App extends React.Component{
   state = {
+    inputValue: '',
     value1:'1234',
     value2:'112312314',
     value3:'11.22',
@@ -44,10 +45,16 @@ class App extends React.Component{
     });
   };
 
+  _changekk = e =>{
+    const { value } = e.target;
+    this.setState({ inputValue: value})
+  }
+
   render(){
     console.log(this.state.field);
     return (
       <div className="hello-react-numeric-form-input">
+        <input type="text" name="" value={this.state.inputValue} onChange={this._changekk} id=""/>
         <h3>Type: blank [ filter: password]</h3>
         <ReactNumericFormInput
         value={this.state.value1}

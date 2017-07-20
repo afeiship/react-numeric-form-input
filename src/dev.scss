@@ -31,6 +31,13 @@ ul,li{list-style: none;}
   }
 
 
+  input{
+    width:100%;
+    border:1px solid #ccc;
+    height:40px;
+    margin-bottom:20px;
+  }
+
   .test-np{
     .react-virtual-input{
       height:40px;
